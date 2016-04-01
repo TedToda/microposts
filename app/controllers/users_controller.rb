@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  
+  before_action :set_user, only: [:show, :edit, :update]
+
   def show # 追加
    @user = User.find(params[:id])
   end
@@ -18,25 +19,16 @@ class UsersController < ApplicationController
     end
   end
 
-  #def edit
-   # @session_id = session[:user_id]
-	#if current_user == @user
-	#	if @user.update(user_params)
-  #	flash[:success] = “updated”
-   # redirect_to root_path
-    #else
-    #flash.now[:alert] = “false”
-    #render ‘edit’
-    #end
-  #end
-   # else
-    #flash[:danger] = “login as a correct user”
-    #redirect_to login_url
-    #end
-  #end
+  def edit #自分で追加中
+  @session_id = session[:user_id]
+	unless current_user == @user
+    flash[:danger] = "正しいユーザーでログインしてください。"
+    redirect_to login_url
+    end
+  end
 
 
-  def update
+  def update #自分で追加
     if @user.update(user_params)
       # 保存に成功した場合はトップページへリダイレクト
       redirect_to root_path , notice: 'updated'
@@ -52,4 +44,9 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :password,
                                  :password_confirmation)
   end
+  
+  def set_user
+    @user = User.find(params[:id])
+  end
+  
 end
