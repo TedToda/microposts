@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update]
-
+  before_action :auth_user,only: [:edit, :update]
   def show # 追加
    @user = User.find(params[:id])
   end
@@ -20,11 +20,7 @@ class UsersController < ApplicationController
   end
 
   def edit #自分で追加中
-  @session_id = session[:user_id]
-	unless current_user == @user
-    flash[:danger] = "正しいユーザーでログインしてください。"
-    redirect_to login_url
-    end
+#  @session_id = session[:user_id]
   end
 
 
@@ -49,4 +45,10 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
   
+  def auth_user
+    unless current_user == @user
+      flash[:danger] = "正しいユーザーでログインしてください。"
+      redirect_to login_url
+    end
+  end
 end
