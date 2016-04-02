@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update]
-  before_action :auth_user,only: [:edit, :update]
-  def show # 追加
+  before_action :auth_user, only: [:edit, :update]
+  
+  def show
    @user = User.find(params[:id])
   end
   
@@ -19,8 +20,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def edit #自分で追加中
-#  @session_id = session[:user_id]
+  def edit #自分で追加
   end
 
 
@@ -37,7 +37,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :password,
+    params.require(:user).permit(:name, :email, :profile, :area, :password,
                                  :password_confirmation)
   end
   
@@ -45,10 +45,11 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
   
-  def auth_user
+  def auth_user #自分で追加
     unless current_user == @user
       flash[:danger] = "正しいユーザーでログインしてください。"
       redirect_to login_url
     end
   end
+  
 end
