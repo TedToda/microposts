@@ -7,6 +7,16 @@ class UsersController < ApplicationController
    @microposts = @user.microposts.order(created_at: :desc)
   end
   
+  def followings #追加
+   @user = User.find(params[:id])
+   @followings = @user.following_users
+  end
+ 
+  def followers #追加
+   @user = User.find(params[:id])
+   @followers = @user.followed_users
+  end
+
   def new
     @user = User.new
   end
